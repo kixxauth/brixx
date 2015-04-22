@@ -25,6 +25,7 @@ global define, exports
 
 
   function deepFreeze(obj) {
+    Object.freeze(obj);
     Object.getOwnPropertyNames(obj).forEach(function (key) {
       var
       prop = obj[key];
@@ -33,7 +34,7 @@ global define, exports
         deepFreeze(prop);
       }
     });
-    return Object.freeze(obj);
+    return obj;
   }
 
 

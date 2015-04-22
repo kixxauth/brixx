@@ -53,6 +53,64 @@ describe('BRIXX', function () {
     });
   });
 
+  describe('.deepFreeze()', function () {
+    it('throws when passed undefined', function () {
+      expect(function () {
+        BRIXX.deepFreeze();
+      }).to.throwError(function (e) {
+        expect(e).to.be.a(TypeError);
+      });
+    });
+    it('throws when passed null', function () {
+      expect(function () {
+        BRIXX.deepFreeze(null);
+      }).to.throwError(function (e) {
+        expect(e).to.be.a(TypeError);
+      });
+    });
+    it('throws when passed a Boolean', function () {
+      expect(function () {
+        BRIXX.deepFreeze(true);
+      }).to.throwError(function (e) {
+        expect(e).to.be.a(TypeError);
+      });
+    });
+    it('throws when passed a String', function () {
+      expect(function () {
+        BRIXX.deepFreeze('foo');
+      }).to.throwError(function (e) {
+        expect(e).to.be.a(TypeError);
+      });
+    });
+    it('throws when passed a Number', function () {
+      expect(function () {
+        BRIXX.deepFreeze(99);
+      }).to.throwError(function (e) {
+        expect(e).to.be.a(TypeError);
+      });
+    });
+    it('deeply freezes all objects', function () {
+      var
+      fixture = {
+        foo: 'bar',
+        a: [{}, {}, null],
+        b: [1,2,3],
+        x: {foo: {}, bar: 'foo'},
+        z: null
+      };
+
+      BRIXX.deepFreeze(fixture);
+
+      expect(Object.isFrozen(fixture)).to.be.ok();
+      expect(Object.isFrozen(fixture.a)).to.be.ok();
+      expect(Object.isFrozen(fixture.a[0])).to.be.ok();
+      expect(Object.isFrozen(fixture.a[1])).to.be.ok();
+      expect(Object.isFrozen(fixture.b)).to.be.ok();
+      expect(Object.isFrozen(fixture.x)).to.be.ok();
+      expect(Object.isFrozen(fixture.x.foo)).to.be.ok();
+    });
+  });
+
   describe('.exists()', function () {
     it('returns false when passed undefined', function () {
       expect(BRIXX.exists()).to.be(false);
