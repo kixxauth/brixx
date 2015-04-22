@@ -1,13 +1,17 @@
-'use strict';
+/*
+global expect, BRIXX
+*/
 
-if (typeof require === 'function' && typeof process === 'object') {
-  expect = require('expect.js'),
-  sinon  = require('sinon'),
+/* jshint ignore:start */
+if (typeof require === 'function' && typeof window === 'undefined') {
+  expect = require('expect.js');
   BRIXX  = require('../index');
 }
+/* jshint ignore:end */
 
 
 describe('BRIXX', function () {
+  'use strict';
 
   describe('.ensure()', function () {
     it('returns a blank object if the given value is undefined', function () {
@@ -79,36 +83,36 @@ describe('BRIXX', function () {
     });
   });
 
-  describe('.toString()', function () {
+  describe('.stringify()', function () {
     it('returns an empty string for undefined', function () {
-      expect(BRIXX.toString()).to.be('');
+      expect(BRIXX.stringify()).to.be('');
     });
     it('returns an empty string for null', function () {
-      expect(BIXX.toString(null)).to.be('');
+      expect(BRIXX.stringify(null)).to.be('');
     });
     it('returns an empty string for NaN', function () {
-      expect(BRIXX.toString(NaN)).to.be('');
+      expect(BRIXX.stringify(NaN)).to.be('');
     });
     it('returns "false" for false', function () {
-      expect(BRIXX.toString(false)).to.be('false');
+      expect(BRIXX.stringify(false)).to.be('false');
     });
     it('return "0" for 0', function () {
-      expect(BRIXX.toString(0)).to.be('0');
+      expect(BRIXX.stringify(0)).to.be('0');
     });
     it('returns "[object Function]" for function', function () {
       var f = function () {};
-      expect(BRIXX.toString(f)).to.be('[object Function]');
+      expect(BRIXX.stringify(f)).to.be('[object Function]');
     });
     it('returns "[object Object]" for blank Object', function () {
-      expect(BRIXX.toString({})).to.be('[object Object]');
-      expect(BRIXX.toString(Object.create(null))).to.be('[object Object]');
+      expect(BRIXX.stringify({})).to.be('[object Object]');
+      expect(BRIXX.stringify(Object.create(null))).to.be('[object Object]');
     });
     it('returns the value of .toString() if it exists', function () {
       var x = Object.create(null);
       x.toString = function () {
         return 'foo';
       };
-      expect(BRIXX.toString(x)).to.be('foo');
+      expect(BRIXX.stringify(x)).to.be('foo');
     });
   });
 });
