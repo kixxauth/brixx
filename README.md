@@ -1,5 +1,5 @@
-Promise Action
-==============
+B R I X X
+=========
 
 JavaScript building blocks.
 
