@@ -111,6 +111,83 @@ describe('BRIXX', function () {
     });
   });
 
+  describe('.factory()', function () {
+
+    describe('with no arguments', function () {
+      var VAL = Object.create(null);
+
+      before(function () {
+        VAL.factory = BRIXX.factory();
+        BRIXX.deepFreeze(VAL);
+      });
+      it('creates an object', function () {
+        var x = VAL.factory();
+        expect(typeof x).to.equal('object');
+      });
+      it('creates a blank object', function () {
+        var x = VAL.factory();
+        expect(Object.keys(x).length).to.equal(0);
+      });
+      it('creates an object with initialize method', function () {
+        var x = VAL.factory();
+        expect(typeof x.initialize).to.be('function');
+      });
+    });
+
+    describe('with no dependencies', function () {
+
+      describe('with mixin', function () {
+        var
+        VAL = Object.create(null);
+        VAL.extension = {foo: 'bar'};
+
+        before(function () {
+          VAL.factory = BRIXX.factory(VAL.extension);
+          BRIXX.deepFreeze(VAL);
+        });
+        it('creates a new object', function () {
+          var x = VAL.factory();
+          expect(x).not.to.be(VAL.extension);
+        });
+        it('creates an object with properties of prototype', function () {
+          var x = VAL.factory();
+          expect(x.foo).to.equal('bar');
+        });
+      });
+
+      describe('with constructor', function () {
+        var
+        VAL = Object.create(null);
+
+        function C() {}
+        C.prototype.foo = 'bar';
+
+        VAL.C = C;
+
+        before(function () {
+          VAL.factory = BRIXX.factory(VAL.C);
+          BRIXX.deepFreeze(VAL);
+        });
+        it('creates a new object', function () {
+          var x = VAL.factory();
+          expect(x).not.to.be(C);
+          expect(x).not.to.be(C.prototype);
+        });
+        it('creates an object with properties of prototype', function () {
+          var x = VAL.factory();
+          expect(x.foo).to.equal('bar');
+        });
+        it('creates an object which responds to instanceof', function () {
+          var x = VAL.factory();
+          expect(x instanceof C).to.be.ok();
+        });
+
+      });
+
+    });
+
+  });
+
   describe('.exists()', function () {
     it('returns false when passed undefined', function () {
       expect(BRIXX.exists()).to.be(false);
