@@ -1,7 +1,11 @@
 B R I X X
 =========
-
 JavaScript building blocks.
+
+[![NPM](https://nodei.co/npm/brixx.png)](https://nodei.co/npm/brixx/)
+
+__Built by [@kixxauth](https://twitter.com/kixxauth)__
+
 
 Copyright and License
 ---------------------
