@@ -46,7 +46,12 @@ function stringify(obj) {
 
 function createPrototype(mixins) {
   var
-  proto = Object.create(null);
+  // Use the final mixin (extension) as the prototype so that we
+  // can get a useful instanceof
+  proto = mixins[mixins.length - 1];
+  if (typeof proto === 'function') {
+    proto = proto.prototype;
+  }
   proto.initialize = noop;
   proto.destroy = noop;
 
