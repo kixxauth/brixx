@@ -44,6 +44,7 @@ function stringify(obj) {
 }
 
 
+/*
 function createPrototype(mixins) {
   var
   // Use the final mixin (extension) as the prototype so that we
@@ -89,6 +90,37 @@ function createPrototype(mixins) {
 
   return Object.freeze(proto);
 }
+*/
+
+
+function extendPrototype(proto, mixins) {
+  mixins = mixins.slice();
+  if (typeof proto === 'function') {
+    proto = proto.prototype;
+  }
+
+  proto = mixins.reduce(function (proto, mixin) {
+    return Object.keys(mixin).reduce(function (proto, key) {
+      if (!proto.hasOwnProperty(key)) {
+        proto[key] = mixin[key];
+      }
+      return proto;
+    }, proto);
+  }, proto);
+
+  Object.defineProperties(proto, {
+    initialize: {
+      value: function () {
+      }
+    },
+    destroy: {
+      value: function () {
+      }
+    }
+  });
+
+  return Object.freeze(proto);
+}
 
 
 function factory(mixins, extension) {
@@ -97,10 +129,12 @@ function factory(mixins, extension) {
 
   if ( extension &&
        (typeof extension === 'object' || typeof extension === 'function')) {
-    mixins.push(extension);
+    proto = extension;
+  } else {
+    proto = mixins.pop();
   }
 
-  proto = createPrototype(mixins);
+  proto = extendPrototype(proto, mixins);
 
   return function (spec) {
     spec = (spec == void 0) ? Object.create(null) : copy(spec);
@@ -119,7 +153,7 @@ function copy(obj) {
 }
 
 
-function noop() {}
+//function noop() {}
 
 
 exports.ensure = ensure;

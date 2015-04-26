@@ -155,6 +155,44 @@ describe('BRIXX', function () {
         });
       });
 
+      describe('with null dependencies', function () {
+        var
+        VAL = Object.create(null);
+        VAL.extension = {foo: 'bar'};
+
+        before(function () {
+          VAL.factory = BRIXX.factory(null, VAL.extension);
+          BRIXX.deepFreeze(VAL);
+        });
+        it('creates a new object', function () {
+          var x = VAL.factory();
+          expect(x).not.to.be(VAL.extension);
+        });
+        it('creates an object with properties of prototype', function () {
+          var x = VAL.factory();
+          expect(x.foo).to.equal('bar');
+        });
+      });
+
+      describe('with empty dependencies', function () {
+        var
+        VAL = Object.create(null);
+        VAL.extension = {foo: 'bar'};
+
+        before(function () {
+          VAL.factory = BRIXX.factory([], VAL.extension);
+          BRIXX.deepFreeze(VAL);
+        });
+        it('creates a new object', function () {
+          var x = VAL.factory();
+          expect(x).not.to.be(VAL.extension);
+        });
+        it('creates an object with properties of prototype', function () {
+          var x = VAL.factory();
+          expect(x.foo).to.equal('bar');
+        });
+      });
+
       describe('with constructor', function () {
         var
         VAL = Object.create(null);
@@ -184,6 +222,31 @@ describe('BRIXX', function () {
 
       });
 
+    });
+
+    describe('with dependencies', function () {
+
+      describe('with single mixin', function () {
+        var
+        VAL = Object.create(null);
+        VAL.base = {x: 'y', foo: 'baz'};
+        VAL.extension = {foo: 'bar'};
+
+        before(function () {
+          VAL.factory = BRIXX.factory(VAL.base, VAL.extension);
+          BRIXX.deepFreeze(VAL);
+        });
+        it('creates a new object', function () {
+          var x = VAL.factory();
+          expect(x).not.to.be(VAL.base);
+          expect(x).not.to.be(VAL.extension);
+        });
+        it('creates an object with properties of prototype', function () {
+          var x = VAL.factory();
+          expect(x.x).to.equal('y');
+          expect(x.foo).to.equal('bar');
+        });
+      });
     });
 
   });
