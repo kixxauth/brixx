@@ -11,10 +11,11 @@ exports.main = function () {
     var
     proc,
     exec   = FilePath.create().append('node_modules', '.bin', 'mocha'),
-    target = FilePath.create().append('test', 'test.js');
+    target = FilePath.create().append('test');
 
     proc = CP.spawn(exec.toString(), [
       '--colors',
+      '--recursive',
       target.toString()
     ]);
 

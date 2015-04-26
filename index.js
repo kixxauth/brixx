@@ -94,11 +94,6 @@ function createPrototype(mixins) {
 
 
 function extendPrototype(proto, mixins) {
-  mixins = mixins.slice();
-  if (typeof proto === 'function') {
-    proto = proto.prototype;
-  }
-
   proto = mixins.reduce(function (proto, mixin) {
     return Object.keys(mixin).reduce(function (proto, key) {
       if (!proto.hasOwnProperty(key)) {
@@ -124,14 +119,18 @@ function extendPrototype(proto, mixins) {
 
 
 function factory(mixins, extension) {
-  mixins = Array.isArray(mixins) ? mixins.slice() : [ensure(mixins)];
   var proto;
+  mixins = Array.isArray(mixins) ? mixins.slice() : [ensure(mixins)];
 
-  if ( extension &&
-       (typeof extension === 'object' || typeof extension === 'function')) {
+  if (extension && typeof extension === 'object') {
     proto = extension;
+  } else if (typeof extension === 'function') {
+    proto = extension.prototype;
   } else {
     proto = mixins.pop();
+    if (typeof proto === 'function') {
+      proto = proto.prototype;
+    }
   }
 
   proto = extendPrototype(proto, mixins);
