@@ -44,57 +44,26 @@ function stringify(obj) {
 }
 
 
-/*
-function createPrototype(mixins) {
+
+function extendPrototype(proto, mixins) {
   var
-  // Use the final mixin (extension) as the prototype so that we
-  // can get a useful instanceof
-  proto = mixins[mixins.length - 1];
-  if (typeof proto === 'function') {
-    proto = proto.prototype;
-  }
-  proto.initialize = noop;
-  proto.destroy = noop;
+  initializer      = noop,
+  destroyer        = noop,
+  protoInitializer = typeof proto.initialize === 'function' ?
+                     proto.initialize : noop,
+  protoDestroyer   = typeof proto.destroy === 'function' ?
+                     proto.destroy : noop;
 
   proto = mixins.reduce(function (proto, mixin) {
     var
-    childInitialize,
-    childDestroy = typeof mixin.destroy === 'function' ? mixin.destroy : noop,
-    parentInitialize = proto.initialize,
-    parentDestroy = proto.destroy;
+    childInitializer = typeof mixin.initialize === 'function' ?
+                       mixin.initialize : noop,
+    childDestroyer   = typeof mixin.destroy === 'function' ?
+                       mixin.destroy : noop;
 
-    if (typeof mixin === 'function') {
-      childInitialize = mixin;
-      mixin = mixin.prototype;
-    } else {
-      childInitialize = typeof mixin.initialize === 'function' ?
-                      mixin.initialize : noop;
-    }
+    initializer = createMethodChain(initializer, childInitializer);
+    destroyer   = createMethodChain(destroyer, childDestroyer);
 
-    mixin.initialize = function (spec) {
-      spec = (spec == void 0) ? Object.create(null) : spec;
-      parentInitialize.call(this, spec);
-      childInitialize.call(this, spec);
-    };
-
-    mixin.destroy = function () {
-      parentDestroy.call(this);
-      childDestroy.call(this);
-    };
-
-    return Object.keys(mixin).reduce(function (proto, key) {
-      proto[key] = mixin[key];
-      return proto;
-    }, proto);
-  }, proto);
-
-  return Object.freeze(proto);
-}
-*/
-
-
-function extendPrototype(proto, mixins) {
-  proto = mixins.reduce(function (proto, mixin) {
     return Object.keys(mixin).reduce(function (proto, key) {
       if (!proto.hasOwnProperty(key)) {
         proto[key] = mixin[key];
@@ -105,16 +74,22 @@ function extendPrototype(proto, mixins) {
 
   Object.defineProperties(proto, {
     initialize: {
-      value: function () {
-      }
+      value: createMethodChain(initializer, protoInitializer)
     },
     destroy: {
-      value: function () {
-      }
+      value: createMethodChain(destroyer, protoDestroyer)
     }
   });
 
   return Object.freeze(proto);
+}
+
+
+function createMethodChain(parent, child) {
+  return function (spec) {
+    parent.call(this, spec);
+    child.call(this, spec);
+  };
 }
 
 
@@ -136,7 +111,7 @@ function factory(mixins, extension) {
   proto = extendPrototype(proto, mixins);
 
   return function (spec) {
-    spec = (spec == void 0) ? Object.create(null) : copy(spec);
+    //spec = (spec == void 0) ? Object.create(null) : copy(spec);
     var obj = Object.create(proto);
     obj.initialize(spec);
     return obj;
@@ -144,15 +119,8 @@ function factory(mixins, extension) {
 }
 
 
-function copy(obj) {
-  return Object.keys(obj).reduce(function (rv, key) {
-    rv[key] = obj[key];
-    return rv;
-  }, Object.create(null));
-}
+function noop() {}
 
-
-//function noop() {}
 
 
 exports.ensure = ensure;

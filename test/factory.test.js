@@ -17,7 +17,7 @@ describe('.factory()', function () {
 
     before(function () {
       VAL.factory = BRIXX.factory();
-      BRIXX.deepFreeze(VAL);
+      Object.freeze(VAL);
     });
     it('creates an object', function () {
       var x = VAL.factory();
@@ -49,7 +49,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory(VAL.extension);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -81,7 +81,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory(null, VAL.extension);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -113,7 +113,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory([], VAL.extension);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -149,7 +149,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory(VAL.C);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -196,7 +196,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory(VAL.base);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -229,7 +229,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory([VAL.base, VAL.subbase]);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -267,7 +267,7 @@ describe('.factory()', function () {
 
       before(function () {
         VAL.factory = BRIXX.factory(VAL.base, VAL.extension);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
@@ -329,14 +329,23 @@ describe('.factory()', function () {
       VAL.extension = {foo: 'bar'};
 
       before(function () {
+        VAL.baseProps = Object.getOwnPropertyNames(VAL.base);
+        VAL.subbaseProps = Object.getOwnPropertyNames(VAL.subbase);
         VAL.factory = BRIXX.factory([VAL.base, VAL.subbase], VAL.extension);
-        BRIXX.deepFreeze(VAL);
+        Object.freeze(VAL);
       });
       it('creates a new object', function () {
         var x = VAL.factory();
         expect(x).not.to.be(VAL.base);
         expect(x).not.to.be(VAL.subbase);
         expect(x).not.to.be(VAL.extension);
+      });
+      it('does not mutate mixins', function () {
+        var
+        baseProps = Object.getOwnPropertyNames(VAL.base),
+        subbaseProps = Object.getOwnPropertyNames(VAL.subbase);
+        expect(VAL.baseProps.length).to.equal(baseProps.length);
+        expect(VAL.subbaseProps.length).to.equal(subbaseProps.length);
       });
       it('creates an object with base prototype', function () {
         var
@@ -364,6 +373,56 @@ describe('.factory()', function () {
         expect(x.baz).to.be(undefined);
       });
     });
+  });
+
+  describe('factory with initialize and destroy chains', function () {
+    var
+    VAL = Object.create(null);
+    VAL.m1 = {
+      initialize: function (spec) {
+        this.specs.push(spec);
+        this.initializers.push('m1');
+      },
+      destroy: function () {
+        this.destroyers.push('m1');
+      }
+    };
+    VAL.m2 = {
+      specs        : [],
+      initializers : [],
+      destroyers   : []
+    };
+    VAL.m3 = {
+      initialize: function (spec) {
+        this.specs.push(spec);
+        this.initializers.push('m3');
+      },
+      destroy: function () {
+        this.destroyers.push('m3');
+      }
+    };
+    VAL.extension = {
+      initialize: function (spec) {
+        this.specs.push(spec);
+        this.initializers.push('extension');
+      }
+    };
+
+    before(function () {
+      VAL.factory = BRIXX.factory([VAL.m1, VAL.m2, VAL.m3], VAL.extension);
+    });
+    it('calls initializers in parent order', function () {
+      var x = VAL.factory();
+      expect(x.initializers[0]).to.be('m1');
+      expect(x.initializers[1]).to.be('m3');
+    });
+    it('calls destroyers in parent order', function () {
+      var x = VAL.factory();
+      x.destroy();
+      expect(x.destroyers[0]).to.be('m1');
+      expect(x.destroyers[1]).to.be('m3');
+    });
+
   });
 
 });
