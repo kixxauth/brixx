@@ -298,8 +298,34 @@ describe('.factory()', function () {
     describe('> 1 mixins', function () {
       var
       VAL = Object.create(null);
-      VAL.base = {x: 1, foo: 'baz'};
-      VAL.subbase = {y: 2, foo: 'beep'};
+      VAL.base = Object.defineProperties({}, {
+        x: {
+          enumerable : true,
+          value      : 1
+        },
+        foo: {
+          enumerable : true,
+          value      : 'baz'
+        },
+        bar: {
+          enumerable : false,
+          value      : 'foo'
+        }
+      });
+      VAL.subbase = Object.defineProperties({}, {
+        y: {
+          enumerable : true,
+          value      : 2
+        },
+        foo: {
+          enumerable : true,
+          value      : 'beep'
+        },
+        baz: {
+          enumerable : false,
+          value      : 'foobar'
+        }
+      });
       VAL.extension = {foo: 'bar'};
 
       before(function () {
@@ -327,11 +353,15 @@ describe('.factory()', function () {
         expect(props).to.contain('y');
         expect(props.length).to.be(5);
       });
-      it('creates an object with properties of mixins', function () {
+      it('creates an object with only enumerable props of mixins', function () {
         var x = VAL.factory();
         expect(x.x).to.equal(1);
         expect(x.y).to.equal(2);
         expect(x.foo).to.equal('bar');
+
+        // Non enumerable props to not get copied to the prototype.
+        expect(x.bar).to.be(undefined);
+        expect(x.baz).to.be(undefined);
       });
     });
   });
