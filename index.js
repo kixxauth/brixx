@@ -111,7 +111,7 @@ function factory(mixins, extension) {
   proto = extendPrototype(proto, mixins);
 
   return function (spec) {
-    //spec = (spec == void 0) ? Object.create(null) : copy(spec);
+    spec = (spec == void 0) ? Object.create(null) : spec;
     var obj = Object.create(proto);
     obj.initialize(spec);
     return obj;

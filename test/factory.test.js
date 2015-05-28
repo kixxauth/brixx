@@ -380,6 +380,9 @@ describe('.factory()', function () {
     VAL = Object.create(null);
     VAL.m1 = {
       initialize: function (spec) {
+        this.specs        = [];
+        this.initializers = [];
+        this.destroyers   = [];
         this.specs.push(spec);
         this.initializers.push('m1');
       },
@@ -388,9 +391,6 @@ describe('.factory()', function () {
       }
     };
     VAL.m2 = {
-      specs        : [],
-      initializers : [],
-      destroyers   : []
     };
     VAL.m3 = {
       initialize: function (spec) {
@@ -413,14 +413,24 @@ describe('.factory()', function () {
     });
     it('calls initializers in parent order', function () {
       var x = VAL.factory();
+      expect(x.initializers.length).to.be(3);
       expect(x.initializers[0]).to.be('m1');
       expect(x.initializers[1]).to.be('m3');
+      expect(x.initializers[2]).to.be('extension');
     });
     it('calls destroyers in parent order', function () {
       var x = VAL.factory();
       x.destroy();
+      expect(x.destroyers.length).to.be(2);
       expect(x.destroyers[0]).to.be('m1');
       expect(x.destroyers[1]).to.be('m3');
+    });
+    it('calls initializers with default spec', function () {
+      var x = VAL.factory();
+      expect(x.specs.length).to.be(3);
+      expect(x.specs[0]).to.be.an('object');
+      expect(x.specs[0]).to.be(x.specs[1]);
+      expect(x.specs[2]).to.be(x.specs[1]);
     });
 
   });
