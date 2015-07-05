@@ -65,7 +65,7 @@ function extendPrototype(proto, mixins) {
     destroyer   = createMethodChain(destroyer, childDestroyer);
 
     return Object.keys(mixin).reduce(function (proto, key) {
-      if (!proto.hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(proto, key)) {
         proto[key] = mixin[key];
       }
       return proto;

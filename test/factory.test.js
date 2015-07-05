@@ -263,7 +263,8 @@ describe('.factory()', function () {
       var
       VAL = Object.create(null);
       VAL.base = {x: 'y', foo: 'baz'};
-      VAL.extension = {foo: 'bar'};
+      VAL.extension = Object.create(null);
+      VAL.extension.foo = 'bar';
 
       before(function () {
         VAL.factory = BRIXX.factory(VAL.base, VAL.extension);
@@ -280,7 +281,7 @@ describe('.factory()', function () {
         proto = Object.getPrototypeOf(x),
         props = Object.getOwnPropertyNames(proto),
         base  = Object.getPrototypeOf(proto);
-        expect(base).to.be(Object.prototype);
+        expect(base).to.be(null);
         expect(proto).to.be(VAL.extension);
         expect(props).to.contain('initialize');
         expect(props).to.contain('destroy');
@@ -295,10 +296,45 @@ describe('.factory()', function () {
       });
     });
 
+    describe('with no extension', function () {
+      var
+      VAL = Object.create(null);
+      VAL.base = {x: 'y', foo: 'baz'};
+      VAL.base = Object.create(null);
+      VAL.base.x = 'y';
+      VAL.base.foo = 'baz';
+
+      before(function () {
+        VAL.factory = BRIXX.factory(VAL.base);
+        Object.freeze(VAL);
+      });
+      it('creates a new object', function () {
+        var x = VAL.factory();
+        expect(x).not.to.be(VAL.base);
+      });
+      it('creates an object with base prototype', function () {
+        var
+        x     = VAL.factory(),
+        proto = Object.getPrototypeOf(x),
+        props = Object.getOwnPropertyNames(proto);
+        expect(proto).to.be(VAL.base);
+        expect(props).to.contain('initialize');
+        expect(props).to.contain('destroy');
+        expect(props).to.contain('foo');
+        expect(props).to.contain('x');
+        expect(props.length).to.be(4);
+      });
+      it('creates an object with overridden properties', function () {
+        var x = VAL.factory();
+        expect(x.x).to.equal('y');
+        expect(x.foo).to.equal('baz');
+      });
+    });
+
     describe('> 1 mixins', function () {
       var
       VAL = Object.create(null);
-      VAL.base = Object.defineProperties({}, {
+      VAL.base = Object.defineProperties(Object.create(null), {
         x: {
           enumerable : true,
           value      : 1
@@ -312,7 +348,7 @@ describe('.factory()', function () {
           value      : 'foo'
         }
       });
-      VAL.subbase = Object.defineProperties({}, {
+      VAL.subbase = Object.defineProperties(Object.create(null), {
         y: {
           enumerable : true,
           value      : 2
