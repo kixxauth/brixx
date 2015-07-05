@@ -339,6 +339,10 @@ describe('.factory()', function () {
           enumerable : true,
           value      : 1
         },
+        z: {
+          enumerable : true,
+          value      : 'a'
+        },
         foo: {
           enumerable : true,
           value      : 'baz'
@@ -352,6 +356,10 @@ describe('.factory()', function () {
         y: {
           enumerable : true,
           value      : 2
+        },
+        z: {
+          enumerable : true,
+          value      : 'b'
         },
         foo: {
           enumerable : true,
@@ -396,13 +404,15 @@ describe('.factory()', function () {
         expect(props).to.contain('foo');
         expect(props).to.contain('x');
         expect(props).to.contain('y');
-        expect(props.length).to.be(5);
+        expect(props).to.contain('z');
+        expect(props.length).to.be(6);
       });
       it('creates an object with only enumerable props of mixins', function () {
         var x = VAL.factory();
         expect(x.x).to.equal(1);
         expect(x.y).to.equal(2);
         expect(x.foo).to.equal('bar');
+        expect(x.z).to.equal('b');
 
         // Non enumerable props to not get copied to the prototype.
         expect(x.bar).to.be(undefined);
@@ -445,7 +455,7 @@ describe('.factory()', function () {
     };
 
     before(function () {
-      VAL.factory = BRIXX.factory([VAL.m1, VAL.m2, VAL.m3], VAL.extension);
+      VAL.factory = BRIXX.factory([VAL.m3, VAL.m2, VAL.m1], VAL.extension);
     });
     it('calls initializers in parent order', function () {
       var x = VAL.factory();

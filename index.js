@@ -108,7 +108,7 @@ function factory(mixins, extension) {
     }
   }
 
-  proto = extendPrototype(proto, mixins);
+  proto = extendPrototype(proto, mixins.reverse());
 
   return function (spec) {
     spec = (spec == void 0) ? Object.create(null) : spec;
