@@ -1,6 +1,6 @@
 {
   "name"        : "brixx",
-  "version"     : "0.1.1",
+  "version"     : "1.0.0",
   "description" : "JavaScript building blocks.",
   "main"        : "index.js",
   "scripts": {
@@ -19,9 +19,9 @@
     "url"  : "https://github.com/kixxauth/brixx.git"
   },
   "keywords": [
-    "promises",
-    "control",
-    "flow",
+    "mixin",
+    "object",
+    "factory",
     "pattern"
   ],
   "author"  : "Kris Walker <kris@kixx.name> (www.kixx.name)",

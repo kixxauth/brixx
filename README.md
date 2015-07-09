@@ -6,6 +6,8 @@ JavaScript building blocks.
 
 __Built by [@kixxauth](https://twitter.com/kixxauth)__
 
+Annotated source code is in [index.js](./index.js).
+
 
 Copyright and License
 ---------------------
