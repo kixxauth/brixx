@@ -44,75 +44,77 @@ function stringify(obj) {
 }
 
 
-
 function extendPrototype(proto, mixins) {
   var
-  initializer      = noop,
-  destroyer        = noop,
-  protoInitializer = typeof proto.initialize === 'function' ?
-                     proto.initialize : noop,
-  protoDestroyer   = typeof proto.destroy === 'function' ?
-                     proto.destroy : noop;
+  initializers = [],
+  destroyers   = [];
 
   proto = mixins.reduce(function (proto, mixin) {
-    var
-    childInitializer = typeof mixin.initialize === 'function' ?
-                       mixin.initialize : noop,
-    childDestroyer   = typeof mixin.destroy === 'function' ?
-                       mixin.destroy : noop;
 
-    initializer = createMethodChain(initializer, childInitializer);
-    destroyer   = createMethodChain(destroyer, childDestroyer);
+    initializers.push(getMethod(mixin, 'initialize'));
+    destroyers.push(getMethod(mixin, 'destroy'));
 
     return Object.keys(mixin).reduce(function (proto, key) {
-      if (!Object.prototype.hasOwnProperty.call(proto, key)) {
-        proto[key] = mixin[key];
-      }
+      proto[key] = mixin[key];
       return proto;
     }, proto);
+
   }, proto);
+
+  function chainMethods(methods) {
+    return function (args) {
+      var i = 0;
+      for (i; i < methods.length; i += 1) {
+        methods[i].call(this, args);
+      }
+    };
+  }
 
   Object.defineProperties(proto, {
     initialize: {
-      value: createMethodChain(initializer, protoInitializer)
+      value: chainMethods(initializers)
     },
     destroy: {
-      value: createMethodChain(destroyer, protoDestroyer)
+      value: chainMethods(destroyers)
     }
   });
 
-  return Object.freeze(proto);
+  return proto;
 }
 
 
-function createMethodChain(parent, child) {
-  return function (spec) {
-    parent.call(this, spec);
-    child.call(this, spec);
-  };
+function getMethod(obj, name) {
+  return typeof obj[name] === 'function' ? obj[name] : noop;
 }
 
 
-function factory(mixins, extension) {
-  var proto;
-  mixins = Array.isArray(mixins) ? mixins.slice() : [ensure(mixins)];
-
-  if (extension && typeof extension === 'object') {
-    proto = extension;
-  } else if (typeof extension === 'function') {
-    proto = extension.prototype;
-  } else {
-    proto = mixins.pop();
-    if (typeof proto === 'function') {
-      proto = proto.prototype;
-    }
+function factory(prototype, mixins, extension) {
+  if (arguments.length === 0) {
+    prototype = {};
+    mixins    = [];
+  } else if (arguments.length === 1) {
+    mixins    = prototype;
+    prototype = {};
+  } else if (arguments.length === 2) {
+    extension = mixins;
+    mixins    = prototype;
+    prototype = {};
   }
 
-  proto = extendPrototype(proto, mixins.reverse());
+  prototype = prototype === null ? Object.create(null) : prototype;
+  mixins    = Array.isArray(mixins) ? mixins : [mixins];
+  if (extension) {
+    mixins.push(extension);
+  }
+  mixins = mixins.filter(function (mixin) {
+    return mixin != void 0;
+  });
+
+  prototype = extendPrototype(prototype, mixins);
 
   return function (spec) {
     spec = (spec == void 0) ? Object.create(null) : spec;
-    var obj = Object.create(proto);
+    var obj = Object.create(prototype);
     obj.initialize(spec);
     return obj;
   };
