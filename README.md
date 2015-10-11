@@ -1,8 +1,18 @@
 B R I X X
 =========
-JavaScript building blocks.
-
 [![NPM](https://nodei.co/npm/brixx.png)](https://nodei.co/npm/brixx/)
+
+#### JavaScript building blocks.
+* BRIXX.ensure()
+* BRIXX.deepFreeze()
+* BRIXX.exists()
+* BRIXX.stringify()
+* BRIXX.factory()
+* BRIXX.Model
+
+Include this module in your own package, use it to extend Underscore or Lodash, or include BRIXX in your projects for general purpose application programming.
+
+Designed to work in both the Browser (IE9+) and Node.js. Used in both [KIXX.js](https://github.com/kixxauth/kixxjs) and [Enginemill](https://github.com/kixxauth/enginemill).
 
 __Built by [@kixxauth](https://twitter.com/kixxauth)__
 
