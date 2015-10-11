@@ -3,6 +3,9 @@
 'use strict';
 
 
+function noop() {}
+
+
 // Ensures the passed in object is, in fact, an Object.
 // When `null` or `undefined` are passed in, ensure() returns a new Object
 // created with `Object.create(null)`. Otherwise it returns the
@@ -140,7 +143,4 @@ function factory(prototype, mixins, extension) {
   };
 }
 exports.factory = factory;
-
-
-function noop() {}
 
