@@ -22,7 +22,9 @@
     "mixin",
     "object",
     "factory",
-    "pattern"
+    "pattern",
+    "immutable",
+    "model"
   ],
   "author"  : "Kris Walker <kris@kixx.name> (www.kixx.name)",
   "license" : "MIT",
