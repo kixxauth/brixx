@@ -65,9 +65,8 @@ exports.stringify = stringify;
 
 
 function extendPrototype(proto, mixins) {
-  var
-  initializers = [],
-  destroyers   = [];
+  var initializers = [];
+  var destroyers = [];
 
   proto = mixins.reduce(function (proto, mixin) {
 
