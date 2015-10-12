@@ -2,6 +2,9 @@
 /* global exports */
 'use strict';
 
+//
+// Utilities
+//
 
 function noop() {}
 
@@ -49,7 +52,8 @@ exports.deepFreeze = deepFreeze;
 
 
 // Check to see if the passed in Object exists.
-// Returns false for null, undefined or NaN, and true for everything else.
+// Returns false for null, undefined, or NaN.
+// Returns true for everything else.
 function exists(obj) {
   // Because isNaN({}) == true
   return !(obj == void 0 || (typeof obj == 'number' && isNaN(obj)));
@@ -72,6 +76,9 @@ function stringify(obj) {
 }
 exports.stringify = stringify;
 
+//
+// BRIXX.factory() helpers
+//
 
 function extendPrototype(proto, mixins) {
   var initializers = [];
@@ -110,7 +117,33 @@ function getMethod(obj, name) {
 }
 
 
-// An object factory that uses the mixin pattern.
+// An object factory which uses the mixin pattern.
+// Pass it some mixins and it will return an Object factory Function for you.
+// Returns a Function which will create new Objects using a prototype composed
+// of the mixins passed in. The returned Object factory will call initialize()
+// on your object instance. If there is an initialize() function defined on
+// any of the mixins, they will be called before your mixin.
+//
+// Example:
+//
+// var createWidget = BRIXX.factory(BRIXX.Model, {
+//   name: 'Widget',
+//   idAttribute: '_id',
+//
+//   defaults: {
+//     _id    : null,
+//     width  : 5,
+//     height : 2
+//   },
+//
+//   initialize: function () {
+//     this.cid = randomString();
+//   },
+//
+//   area: function () {
+//     return this.width * this.height;
+//   }
+// });
 function factory(prototype, mixins, extension) {
   if (arguments.length === 0) {
     prototype = {};
@@ -145,6 +178,28 @@ function factory(prototype, mixins, extension) {
 exports.factory = factory;
 
 
+// An Object mixin for creating Immutable models.
+// Designed to be uses in BRIXX.factory(see above). Define a set of default
+// values in your definition and the keys will be used to enforce assignment
+// rules on the instance. Includes a mechnanism for naming the type for your
+// model, as well as assigning an ID.
+//
+// Example:
+//
+// var createWidget = BRIXX.factory(BRIXX.Model, {
+//   name: 'Widget',
+//   idAttribute: '_id',
+//
+//   defaults: {
+//     _id    : null,
+//     width  : 5,
+//     height : 2
+//   },
+//
+//   area: function () {
+//     return this.width * this.height;
+//   }
+// });
 exports.Model = {
   idAttribute: 'id',
 
