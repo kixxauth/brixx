@@ -325,6 +325,10 @@
         attrs[k] = self[k];
         return attrs;
       }, Object.create(null));
+    },
+
+    valueOf: function () {
+      return this.toJSON();
     }
   };
 

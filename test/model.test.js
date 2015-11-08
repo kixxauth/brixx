@@ -120,6 +120,14 @@ describe('.Model', function () {
       expect(attrs.height).to.be(2);
       expect(typeof attrs.area).to.be('undefined');
     });
+    it('has valueOf() method', function () {
+      var attrs = VAL.widget.valueOf();
+      expect(typeof attrs.width).to.be('number');
+      expect(attrs.width).to.be(5);
+      expect(typeof attrs.height).to.be('number');
+      expect(attrs.height).to.be(2);
+      expect(typeof attrs.area).to.be('undefined');
+    });
     it('can be used as POJO', function () {
       var widget = VAL.createWidget({
         width: 4,
