@@ -1,13 +1,6 @@
-/*
-global expect, BRIXX
-*/
-
-/* jshint ignore:start */
-if (typeof require === 'function' && typeof window === 'undefined') {
-  expect = require('expect.js');
-  BRIXX  = require('../index');
-}
-/* jshint ignore:end */
+var
+expect = require('expect.js'),
+BRIXX  = require('../index');
 
 describe('.Model', function () {
   'use strict';
