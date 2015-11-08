@@ -1,6 +1,7 @@
 B R I X X
 =========
 [![npm version](https://badge.fury.io/js/brixx.svg)](https://badge.fury.io/js/brixx)
+[![Bower version](https://badge.fury.io/bo/brixx.svg)](https://badge.fury.io/bo/brixx)
 
 #### JavaScript building blocks.
 * BRIXX.ensure()
