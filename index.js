@@ -1,6 +1,8 @@
 /* global define */
 ;(function (global, factory) {
   'use strict';
+
+  // Support CommonJS, AMD, and global script loading.
   if (typeof exports === 'object' && typeof module !== 'undefined') {
     factory(exports);
   } else if (typeof define === 'function' && define.amd) {
@@ -332,6 +334,27 @@
     }
   };
 
+  // Object property pattern matcher. This best explained by an example:
+  // ```JS
+  // var pm = BRIXX.PatternMatcher.create()
+  //       .add({a:1}, 'A')
+  //       .add({b:2}, 'B');
+  //
+  // console.log(pm.find({a:1}));
+  // // ["A"]
+  //
+  // console.log(pm.find({a:2}));
+  // // [] Empty Array
+  //
+  // console.log(pm.find({a:1,b:1}));
+  // // ["A"]
+  //
+  // console.log(pm.find({b:2,c:3}));
+  // // ["B"]
+  //
+  // console.log(pm.find({a:1,b:2}));
+  // // ["A", "B"]
+  // ```
   function PatternMatcher() {}
 
   BRIXX.PatternMatcher = PatternMatcher;
@@ -341,6 +364,9 @@
       this.index = Object.create(null);
     },
 
+    // Registers a pattern/object pair. The pattern could be any JavaScript
+    // type, but an Object hash is most useful. The object could be any value.
+    // Returns the PatternMatcher instance for method chaining.
     add: function (objectPattern, object) {
       var stringPattern = this.patternToString(objectPattern);
       var list = this.index[stringPattern];
@@ -348,8 +374,12 @@
         list = this.index[stringPattern] = [];
       }
       list.push(object);
+      return this;
     },
 
+    // Find a registered value by the given pattern. The pattern could be any
+    // JavaScript type, but an Object hash usually what is used. Always returns
+    // an Array, and in the case that no values are found, an empty Array.
     find: function (objectPattern) {
       var stringPattern = this.patternToString(objectPattern);
       var index = this.index;
@@ -362,11 +392,18 @@
       }, []);
     },
 
+    // Check to see if there are any values registered for a particular pattern.
+    // This is more efficient than calling #find().
     exists: function (objectPattern) {
       var stringPattern = this.patternToString(objectPattern);
       return Boolean(this.index[stringPattern]);
     },
 
+    // Unregister a value, or all values by the given pattern. If `object` is
+    // provided only that object will be removed if it is found to be
+    // registered on the given pattern. If no `object` is provided then
+    // the entire pattern will be unregistered. Returns true if anything was
+    // unregistered and false if not.
     remove: function (objectPattern, object) {
       var stringPattern = this.patternToString(objectPattern);
       var matches;
