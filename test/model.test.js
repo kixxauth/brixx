@@ -148,4 +148,27 @@ describe('.Model', function () {
         .to.be('{"name":"Widget","_id":null,"width":5,"height":6}');
     });
   });
+
+  describe('without default values', function () {
+    var VAL = Object.create(null);
+
+    before(function () {
+      VAL.createWidget = BRIXX.factory(BRIXX.Model, {
+        name: 'Widget',
+        idAttribute: '_id',
+
+        area: function () {
+          return this.width * this.height;
+        }
+      });
+
+      Object.freeze(VAL);
+    });
+
+    it('throws a descriptive error about missing defaults', function () {
+      expect(VAL.createWidget)
+        .to
+        .throwException(/Invalid \"defaults\" attribute on prototype/);
+    });
+  });
 });

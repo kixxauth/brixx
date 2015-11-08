@@ -216,9 +216,15 @@
     initialize: function (spec) {
       var self = this;
       var defaults = this.defaults;
-      var name = this.name || defaults.name;
-      var keys = Object.keys(defaults);
+      var name = this.name || (defaults || {}).name;
+      var keys;
       var values = Object.create(null);
+
+      try {
+        keys = Object.keys(defaults);
+      } catch (err) {
+        throw new Error('Invalid "defaults" attribute on prototype.');
+      }
 
       if (keys.indexOf(this.idAttribute) < 0) {
         throw new Error(name +
