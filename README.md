@@ -22,7 +22,7 @@ Annotated source code is in [index.js](./index.js).
 
 Copyright and License
 ---------------------
-Copyright: (c) 2015 by Kris Walker (http://www.kixx.name)
+Copyright: (c) 2015 - 2016 by Kris Walker (http://www.kixx.name)
 
 Unless otherwise indicated, all source code is licensed under the MIT license. See MIT-LICENSE for details.
 
