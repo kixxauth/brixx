@@ -190,7 +190,7 @@
     Constructor.prototype = prototype;
     Constructor.extend = function (mixins, extension) {
       return factory(Object.create(prototype), mixins, extension);
-    }
+    };
     return Constructor;
   }
   BRIXX.factory = factory;
@@ -251,11 +251,8 @@
       values.name = name;
 
       Object.defineProperties(this, {
-        keys: {
+        _keys: {
           value: keys
-        },
-        size: {
-          value: keys.length
         }
       });
 
@@ -274,7 +271,7 @@
 
     toString: function () {
       var self = this;
-      var keyString = this.keys.map(function (k) {
+      var keyString = this._keys.map(function (k) {
         var val = self[k];
         return k + ': ' + (typeof val === 'string' ? ('"' + val + '"') : val);
       }).join(', ');
@@ -282,7 +279,7 @@
     },
 
     has: function (key) {
-      return this.keys.indexOf(key) >= 0;
+      return this._keys.indexOf(key) >= 0;
     },
 
     hasId: function () {
@@ -315,7 +312,7 @@
       var self = this;
       var diff = [];
 
-      this.keys.forEach(function (k) {
+      this._keys.forEach(function (k) {
         if (self[k] !== other[k]) {
           diff.push([k, self[k], other[k]]);
         }
@@ -329,7 +326,7 @@
 
     toJSON: function () {
       var self = this;
-      return this.keys.reduce(function (attrs, k) {
+      return this._keys.reduce(function (attrs, k) {
         attrs[k] = self[k];
         return attrs;
       }, Object.create(null));
