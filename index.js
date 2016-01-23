@@ -180,12 +180,15 @@
 
     prototype = extendPrototype(prototype, mixins);
 
-    return function (spec) {
+    function Constructor(spec) {
       spec = (spec == void 0) ? Object.create(null) : spec;
       var obj = Object.create(prototype);
       obj.initialize(spec);
       return obj;
-    };
+    }
+
+    Constructor.prototype = prototype;
+    return Constructor;
   }
   BRIXX.factory = factory;
 

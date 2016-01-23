@@ -17,6 +17,10 @@ describe('.factory()', function () {
       expect(x).to.an.Object;
       expect(x).not.to.be(Object.prototype);
     });
+    it('creates an instanceof', function () {
+      var x = VAL.factory();
+      expect(x).to.be.a(VAL.factory);
+    });
     it('creates a blank object', function () {
       var x = VAL.factory();
       expect(Object.keys(x).length).to.equal(0);
@@ -52,6 +56,10 @@ describe('.factory()', function () {
       var x = VAL.factory();
       expect(x).to.an.Object;
       expect(x).not.to.be(VAL.extension);
+    });
+    it('creates an instanceof', function () {
+      var x = VAL.factory();
+      expect(x).to.be.a(VAL.factory);
     });
     it('creates a blank object', function () {
       var x = VAL.factory();
@@ -93,6 +101,10 @@ describe('.factory()', function () {
       expect(x).to.an.Object;
       expect(x).not.to.be(VAL.mixin);
       expect(x).not.to.be(VAL.extension);
+    });
+    it('creates an instanceof', function () {
+      var x = VAL.factory();
+      expect(x).to.be.a(VAL.factory);
     });
     it('creates a blank object', function () {
       var x = VAL.factory();
@@ -139,6 +151,10 @@ describe('.factory()', function () {
         expect(x).not.to.be(VAL.mixin);
         expect(x).not.to.be(VAL.extension);
       });
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
+      });
       it('creates a blank object', function () {
         var x = VAL.factory();
         expect(Object.keys(x).length).to.equal(0);
@@ -181,6 +197,11 @@ describe('.factory()', function () {
         x     = VAL.factory(),
         proto = Object.getPrototypeOf(x);
         expect(proto).to.be(VAL.Person.prototype);
+      });
+
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
       });
 
       it('creates an object with defined constructor', function () {
@@ -247,6 +268,10 @@ describe('.factory()', function () {
         expect(x).to.an.Object;
         expect(x).not.to.be(Object.prototype);
       });
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
+      });
       it('creates a blank object', function () {
         var x = VAL.factory();
         expect(Object.keys(x).length).to.equal(0);
@@ -285,6 +310,10 @@ describe('.factory()', function () {
         var x = VAL.factory();
         expect(x).to.an.Object;
         expect(x).not.to.be(Object.prototype);
+      });
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
       });
       it('creates a blank object', function () {
         var x = VAL.factory();
@@ -327,6 +356,10 @@ describe('.factory()', function () {
         expect(x).not.to.be(VAL.base);
         expect(x).not.to.be(VAL.subbase);
       });
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
+      });
       it('creates a blank object', function () {
         var x = VAL.factory();
         expect(Object.keys(x).length).to.equal(0);
@@ -368,6 +401,10 @@ describe('.factory()', function () {
         expect(x).not.to.be(Object.prototype);
         expect(x).not.to.be(VAL.base);
         expect(x).not.to.be(VAL.extension);
+      });
+      it('creates an instanceof', function () {
+        var x = VAL.factory();
+        expect(x).to.be.a(VAL.factory);
       });
       it('creates a blank object', function () {
         var x = VAL.factory();
