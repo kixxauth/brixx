@@ -41,6 +41,37 @@ describe('.factory()', function () {
       expect(props).to.contain('initialize');
       expect(props).to.contain('destroy');
     });
+
+    describe('invoked with `new`', function () {
+      var x;
+      before(function () {
+        x = new VAL.factory();
+      });
+      it('creates a new object', function () {
+        expect(x).to.an.Object;
+        expect(x).not.to.be(Object.prototype);
+      });
+      it('creates an instanceof', function () {
+        expect(x).to.be.a(VAL.factory);
+      });
+      it('creates a blank object', function () {
+        expect(Object.keys(x).length).to.equal(0);
+      });
+      it('creates an object with Object.prototype', function () {
+        var
+        proto = Object.getPrototypeOf(x),
+        base  = Object.getPrototypeOf(proto);
+        expect(base).to.be(Object.prototype);
+      });
+      it('adds proprietary prototype methods', function () {
+        var
+        proto = Object.getPrototypeOf(x),
+        props = Object.getOwnPropertyNames(proto);
+        expect(props.length).to.be(2);
+        expect(props).to.contain('initialize');
+        expect(props).to.contain('destroy');
+      });
+    });
   });
 
   describe('with 1 Object argument', function () {
@@ -626,4 +657,58 @@ describe('.factory()', function () {
 
   });
 
+});
+
+describe('.factory() -> .extend()', function () {
+  'use strict';
+  var VAL = Object.create(null);
+  VAL.extension = Object.create(null);
+  VAL.extension.foo = 'bar';
+  VAL.extension.fav = 7;
+  VAL.factory = BRIXX.factory(VAL.extension);
+
+  describe('with 1 Object argument', function () {
+    before(function () {
+      VAL.childExtension = {fav: 4, color: 'red'};
+      VAL.childFactory = VAL.factory.extend(VAL.childExtension);
+      Object.freeze(VAL);
+    });
+    it('creates a new object', function () {
+      var x = VAL.childFactory();
+      expect(x).to.an(Object);
+      expect(x).not.to.be(VAL.extension);
+      expect(x).not.to.be(VAL.childExtension);
+    });
+    it('creates an instanceof', function () {
+      var x = VAL.childFactory();
+      expect(x).to.be.a(VAL.factory);
+      expect(x).to.be.a(VAL.childFactory);
+    });
+    it('creates a blank object', function () {
+      var x = VAL.childFactory();
+      expect(Object.keys(x).length).to.equal(0);
+    });
+    it('creates an object with Object.prototype', function () {
+      var
+      x     = VAL.childFactory(),
+      proto = Object.getPrototypeOf(x),
+      base  = Object.getPrototypeOf(proto);
+      expect(base).to.be(VAL.factory.prototype);
+    });
+    it('adds proprietary prototype and extended methods', function () {
+      var
+      x     = VAL.childFactory(),
+      proto = Object.getPrototypeOf(x),
+      props = Object.getOwnPropertyNames(proto);
+      expect(props.length).to.be(4);
+      expect(props).to.contain('initialize');
+      expect(props).to.contain('destroy');
+      expect(props).not.to.contain('foo');
+      expect(props).to.contain('fav');
+      expect(props).to.contain('color');
+      expect(x.foo).to.equal('bar');
+      expect(x.fav).to.equal(4);
+      expect(x.color).to.equal('red');
+    });
+  });
 });

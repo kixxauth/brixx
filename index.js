@@ -188,6 +188,9 @@
     }
 
     Constructor.prototype = prototype;
+    Constructor.extend = function (mixins, extension) {
+      return factory(Object.create(prototype), mixins, extension);
+    }
     return Constructor;
   }
   BRIXX.factory = factory;
