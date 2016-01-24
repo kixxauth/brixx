@@ -139,7 +139,7 @@
   // Example:
   //
   // var createWidget = BRIXX.factory(BRIXX.Model, {
-  //   name: 'Widget',
+  //   type: 'Widget',
   //   idAttribute: '_id',
   //
   //   defaults: {
@@ -205,7 +205,7 @@
   // Example:
   //
   // var createWidget = BRIXX.factory(BRIXX.Model, {
-  //   name: 'Widget',
+  //   type: 'Widget',
   //   idAttribute: '_id',
   //
   //   defaults: {
@@ -224,7 +224,7 @@
     initialize: function (spec) {
       var self = this;
       var defaults = this.defaults;
-      var name = this.name || (defaults || {}).name;
+      var type = this.type || (defaults || {}).type;
       var keys;
       var values = Object.create(null);
 
@@ -235,7 +235,7 @@
       }
 
       if (keys.indexOf(this.idAttribute) < 0) {
-        throw new Error(name +
+        throw new Error(type +
                         ' defaults must contain idAttribute "' +
                         this.idAttribute + '"');
       }
@@ -246,9 +246,9 @@
         return values;
       }, values);
 
-      keys.unshift('name');
+      keys.unshift('type');
       Object.freeze(keys);
-      values.name = name;
+      values.type = type;
 
       Object.defineProperties(this, {
         _keys: {
@@ -275,7 +275,7 @@
         var val = self[k];
         return k + ': ' + (typeof val === 'string' ? ('"' + val + '"') : val);
       }).join(', ');
-      return this.name + ' { ' + keyString + ' }';
+      return this.type + ' { ' + keyString + ' }';
     },
 
     has: function (key) {
@@ -296,7 +296,7 @@
       for (i = 0; i < keys.length; i += 1) {
         if (!this.has(keys[i])) {
           throw new Error('Cannot set undefined key "' +
-                          keys[i] + '" on ' + this.name);
+                          keys[i] + '" on ' + this.type);
         }
       }
       newModel = Object.create(this);

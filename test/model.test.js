@@ -10,7 +10,7 @@ describe('.Model', function () {
 
     before(function () {
       VAL.createWidget = BRIXX.factory(BRIXX.Model, {
-        name: 'Widget',
+        type: 'Widget',
         idAttribute: '_id',
 
         defaults: {
@@ -28,12 +28,12 @@ describe('.Model', function () {
 
       Object.freeze(VAL);
     });
-    it('has a name', function () {
-      expect(VAL.widget.name).to.be('Widget');
+    it('has a type', function () {
+      expect(VAL.widget.type).to.be('Widget');
     });
     it('has custom toString()', function () {
       expect(VAL.widget.toString())
-        .to.be('Widget { name: "Widget", _id: null, width: 5, height: 2 }');
+        .to.be('Widget { type: "Widget", _id: null, width: 5, height: 2 }');
     });
     it('does not have an id', function () {
       expect(VAL.widget._id).to.be(null);
@@ -94,7 +94,7 @@ describe('.Model', function () {
       });
 
       expect(VAL.widget.diff(VAL.widget)).to.be(null);
-      expect(VAL.widget.diff({name: 'Widget', _id: null, width: 5, height: 2}))
+      expect(VAL.widget.diff({type: 'Widget', _id: null, width: 5, height: 2}))
         .to.be(null);
 
       var diff1 = VAL.widget.diff(widget2);
@@ -140,11 +140,11 @@ describe('.Model', function () {
       expect(widget.height).to.be(6);
       expect(typeof widget.depth).to.be('undefined');
       expect(keys.length).to.be(4);
-      expect(keys.indexOf('name') >= 0).to.be.ok();
+      expect(keys.indexOf('type') >= 0).to.be.ok();
       expect(keys.indexOf('_id') >= 0).to.be.ok();
       expect(keys.indexOf('width') >= 0).to.be.ok();
       expect(keys.indexOf('height') >= 0).to.be.ok();
-      expect(widget.hasOwnProperty('name')).to.be.ok();
+      expect(widget.hasOwnProperty('type')).to.be.ok();
       expect(widget.hasOwnProperty('_id')).to.be.ok();
       expect(widget.hasOwnProperty('width')).to.be.ok();
       expect(widget.hasOwnProperty('height')).to.be.ok();
@@ -153,7 +153,7 @@ describe('.Model', function () {
       var widget = VAL.widget.set({height: 6});
       widget.foo = 'bar';
       expect(JSON.stringify(widget))
-        .to.be('{"name":"Widget","_id":null,"width":5,"height":6}');
+        .to.be('{"type":"Widget","_id":null,"width":5,"height":6}');
     });
   });
 
@@ -162,7 +162,7 @@ describe('.Model', function () {
 
     before(function () {
       VAL.createWidget = BRIXX.factory(BRIXX.Model, {
-        name: 'Widget',
+        type: 'Widget',
         idAttribute: '_id',
 
         area: function () {
