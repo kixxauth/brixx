@@ -299,7 +299,7 @@
                           keys[i] + '" on ' + this.type);
         }
       }
-      newModel = Object.create(this);
+      newModel = Object.create(Object.getPrototypeOf(this));
       newModel.initialize(extend(this.toJSON(), values));
       return newModel;
     },

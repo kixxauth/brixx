@@ -1,6 +1,6 @@
 {
   "name"        : "brixx",
-  "version"     : "1.6.0",
+  "version"     : "1.6.1",
   "description" : "JavaScript building blocks.",
   "main"        : "index.js",
   "scripts": {
