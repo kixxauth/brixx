@@ -500,12 +500,13 @@ describe('.factory()', function () {
           value      : 'foobar'
         }
       });
+      VAL.mixins = BRIXX.deepFreeze([VAL.base, VAL.subbase]);
       VAL.extension = {foo: 'bar'};
 
       before(function () {
         VAL.baseProps = Object.getOwnPropertyNames(VAL.base);
         VAL.subbaseProps = Object.getOwnPropertyNames(VAL.subbase);
-        VAL.factory = BRIXX.factory([VAL.base, VAL.subbase], VAL.extension);
+        VAL.factory = BRIXX.factory(VAL.mixins, VAL.extension);
         Object.freeze(VAL);
       });
       it('creates a new object', function () {

@@ -172,7 +172,7 @@
     prototype = prototype === null ? Object.create(null) : prototype;
     mixins    = Array.isArray(mixins) ? mixins : [mixins];
     if (extension) {
-      mixins.push(extension);
+      mixins = mixins.concat([extension]);
     }
     mixins = mixins.filter(function (mixin) {
       return mixin != void 0;
