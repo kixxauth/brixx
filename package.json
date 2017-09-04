@@ -1,24 +1,27 @@
 {
-  "name"        : "brixx",
-  "version"     : "2.0.0",
-  "description" : "JavaScript building blocks.",
-  "main"        : "index.js",
+  "name": "brixx",
+  "version": "2.0.0",
+  "description": "JavaScript building blocks.",
+  "main": "index.js",
   "scripts": {
     "test": "echo 'testing disabled'",
     "lint": "echo 'linting disabled'"
   },
   "repository": {
-    "type" : "git",
-    "url"  : "https://github.com/kixxauth/brixx.git"
+    "type": "git",
+    "url": "https://github.com/kixxauth/brixx.git"
   },
   "keywords": [
     "library",
     "utilities",
     "tools"
   ],
-  "author"  : "Kris Walker (www.kixx.name)",
-  "license" : "MIT",
-  "bugs"    : {
+  "author": "Kris Walker (www.kixx.name)",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "4.6.1"
+  },
+  "bugs": {
     "url": "https://github.com/kixxauth/brixx/issues"
   }
 }
