@@ -1,6 +1,6 @@
 {
   "name"        : "brixx",
-  "version"     : "1.6.2",
+  "version"     : "2.0.0",
   "description" : "JavaScript building blocks.",
   "main"        : "index.js",
   "scripts": {
@@ -12,14 +12,11 @@
     "url"  : "https://github.com/kixxauth/brixx.git"
   },
   "keywords": [
-    "mixin",
-    "object",
-    "factory",
-    "pattern",
-    "immutable",
-    "model"
+    "library",
+    "utilities",
+    "tools"
   ],
-  "author"  : "Kris Walker <kris@kixx.name> (www.kixx.name)",
+  "author"  : "Kris Walker (www.kixx.name)",
   "license" : "MIT",
   "bugs"    : {
     "url": "https://github.com/kixxauth/brixx/issues"
